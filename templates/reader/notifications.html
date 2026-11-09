@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, empty_state %}
+{% block title %}Thông báo{% endblock %}
+{% block eyebrow %}Trung tâm thông báo{% endblock %}
+{% block page_title %}Thông báo{% endblock %}
+{% block content %}
+
+{% set unread = notifications | selectattr('is_read', 'equalto', 0) | list %}
+
+<div class="section-head">
+  <div>
+    <h2>{{ unread|length }} thông báo chưa đọc</h2>
+    <p class="muted">Cập nhật trạng thái yêu cầu mượn, trả sách và hoạt động thư viện.</p>
+  </div>
+  {% if unread %}
+    <form method="post" action="{{ url_for('reader.mark_all_notifications') }}">
+      <button class="btn btn-ghost btn-sm" type="submit">{{ icon('check', 15) }} Đánh dấu tất cả đã đọc</button>
+    </form>
+  {% endif %}
+</div>
+
+{% if notifications %}
+  <div class="notice-list">
+    {% for item in notifications %}
+      <article class="notice {{ 'is-unread' if not item.is_read }}">
+        <span class="notice-dot tone-{{ item.tone }}"></span>
+        <div class="notice-body">
+          <div class="notice-title">
+            <h3>{{ item.title }}</h3>
+            {% if not item.is_read %}<span class="new-pill">Mới</span>{% endif %}
+          </div>
+          <p>{{ item.message }}</p>
+          <span class="notice-time">{{ item.created_at|datetime }}</span>
+        </div>
+        {% if not item.is_read %}
+          <form method="post" action="{{ url_for('reader.mark_notification', notification_id=item.id) }}">
+            <button class="icon-button quiet" type="submit" title="Đánh dấu đã đọc">{{ icon('check', 16) }}</button>
+          </form>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  {{ empty_state('Chưa có thông báo', 'Khi bạn gửi yêu cầu mượn hoặc được duyệt, thông báo sẽ xuất hiện tại đây.', 'bell') }}
+{% endif %}
+
+{% endblock %}

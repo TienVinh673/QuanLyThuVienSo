@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, cover, empty_state %}
+{% block title %}Trang chủ{% endblock %}
+{% block eyebrow %}Không gian đọc{% endblock %}
+{% block page_title %}Xin chào, {{ current_user.full_name.split(' ')[-1] }}{% endblock %}
+{% block content %}
+
+<section class="reader-hero">
+  <div class="hero-copy">
+    <p class="eyebrow light">Thư viện số · HK1 2026–2027</p>
+    <h2>Tìm cuốn sách<br>cho ngày mới.</h2>
+    <p class="hero-lead">{{ library_total }} đầu sách, {{ available_total }} tựa đang sẵn sàng. Tìm theo tên, tác giả, ISBN hoặc thể loại — kết quả hiển thị ngay.</p>
+
+    <form class="hero-search" method="get" action="{{ url_for('reader.home') }}">
+      <div class="search-field">
+        {{ icon('search', 18) }}
+        <input type="text" name="q" value="{{ keyword }}" placeholder="Tên sách, tác giả hoặc ISBN…" aria-label="Từ khóa tìm kiếm">
+      </div>
+      <select name="by" aria-label="Tiêu chí tìm kiếm">
+        {% for option in search_options %}
+          <option value="{{ option.key }}" {{ 'selected' if option.key == criteria }}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+      {% if category_id %}<input type="hidden" name="category" value="{{ category_id }}">{% endif %}
+      <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+    </form>
+
+    <div class="hero-stats">
+      <div><strong>{{ library_total }}</strong><span>đầu sách</span></div>
+      <div><strong>{{ available_total }}</strong><span>sẵn sàng</span></div>
+      <div><strong>{{ categories|length }}</strong><span>thể loại</span></div>
+    </div>
+  </div>
+
+  <aside class="hero-card">
+    <div class="hero-card-head">
+      <span>Phiếu mượn của bạn</span>
+      {{ icon('swap', 18) }}
+    </div>
+    {% if dashboard.current_loans %}
+      {% for loan in dashboard.current_loans[:2] %}
+        <a class="mini-loan" href="{{ url_for('book.detail', book_id=loan.book_id) }}">
+          <span class="mini-cover" style="--cover: {{ loan.book_cover_color }}">{{ loan.book_title[:1] }}</span>
+          <span class="mini-loan-text">
+            <strong>{{ loan.book_title }}</strong>
+            {% if loan.is_overdue %}
+              <small class="text-danger">Quá hạn {{ -loan.days_left }} ngày</small>
+            {% else %}
+              <small>Còn {{ loan.days_left }} ngày · hạn {{ loan.due_date|date }}</small>
+            {% endif %}
+          </span>
+          {{ icon('arrow-right', 15) }}
+        </a>
+      {% endfor %}
+    {% else %}
+      <div class="hero-empty">
+        {{ icon('book', 24) }}
+        <p>Chưa có sách đang mượn.<br>Hãy chọn một cuốn nhé!</p>
+      </div>
+    {% endif %}
+    {% if dashboard.pending_requests %}
+      <div class="pending-chip">{{ icon('clock', 14) }} {{ dashboard.pending_requests|length }} yêu cầu đang chờ duyệt</div>
+    {% endif %}
+    <a class="hero-card-link" href="{{ url_for('reader.loans') }}">Xem tất cả phiếu mượn {{ icon('arrow-right', 14) }}</a>
+  </aside>
+</section>
+
+<div class="chip-row">
+  <a class="chip {{ 'is-active' if not category_id }}" href="{{ url_for('reader.home', q=keyword or None, by=criteria) }}">Tất cả</a>
+  {% for category in categories %}
+    <a class="chip {{ 'is-active' if category_id == category.id }}"
+       href="{{ url_for('reader.home', category=category.id, q=keyword or None, by=criteria) }}">
+      {{ category.name }} <span>{{ category.book_count }}</span>
+    </a>
+  {% endfor %}
+</div>
+
+<div class="section-head">
+  <div>
+    {% if is_search %}
+      <h2>Kết quả cho “{{ keyword }}”</h2>
+      <p class="muted">{{ books|length }} kết quả theo tiêu chí {{ criteria_label|lower }}.</p>
+    {% else %}
+      <h2>Tất cả đầu sách</h2>
+      <p class="muted">{{ books|length }} đầu sách trong thư viện.</p>
+    {% endif %}
+  </div>
+  <span class="section-note">{{ icon('spark', 15) }} Cập nhật mới nhất</span>
+</div>
+
+{% if books %}
+  <div class="book-grid">
+    {% for book in books %}
+      <article class="book-card">
+        <a class="book-card-cover" href="{{ url_for('book.detail', book_id=book.id) }}">
+          {{ cover(book) }}
+        </a>
+        <div class="book-card-body">
+          <span class="tiny">{{ book.category_name }}</span>
+          <h3><a href="{{ url_for('book.detail', book_id=book.id) }}">{{ book.title }}</a></h3>
+          <p class="book-author">{{ book.author }}</p>
+          <div class="book-card-foot">
+            {% if book.is_available %}
+              <span class="avail">{{ icon('check', 13) }} Còn {{ book.available_copies }}</span>
+            {% else %}
+              <span class="avail out">Hết bản sao</span>
+            {% endif %}
+            <a class="card-link" href="{{ url_for('book.detail', book_id=book.id) }}">Chi tiết {{ icon('arrow-right', 13) }}</a>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  {{ empty_state('Không tìm thấy sách phù hợp', 'Thử từ khóa khác hoặc bỏ bộ lọc thể loại để xem toàn bộ thư viện.', 'search') }}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,33 @@
+LẬP TRÌNH PYTHON CĂN BẢN
+Tài liệu học tập
+
+CHƯƠNG 1. GIỚI THIỆU PYTHON
+
+Python là ngôn ngữ lập trình bậc cao, có cú pháp rõ ràng và dễ đọc. Python được
+sử dụng rộng rãi trong phát triển web, phân tích dữ liệu, trí tuệ nhân tạo và
+tự động hóa.
+
+CHƯƠNG 2. KIỂU DỮ LIỆU VÀ BIẾN
+
+Python hỗ trợ nhiều kiểu dữ liệu cơ bản như số nguyên, số thực, chuỗi, danh sách,
+từ điển và tập hợp. Biến trong Python không cần khai báo kiểu dữ liệu trước.
+
+CHƯƠNG 3. CẤU TRÚC ĐIỀU KHIỂN
+
+Các cấu trúc if, elif, else cho phép rẽ nhánh chương trình. Vòng lặp for và while
+giúp lặp lại các thao tác. Hàm giúp đóng gói logic và tái sử dụng mã nguồn.
+
+CHƯƠNG 4. LẬP TRÌNH HƯỚNG ĐỐI TƯỢNG
+
+Lớp và đối tượng là nền tảng của lập trình hướng đối tượng. Các khái niệm kế thừa,
+đóng gói và đa hình giúp tổ chức chương trình chặt chẽ và dễ mở rộng.
+
+CHƯƠNG 5. LÀM VIỆC VỚI CƠ SỞ DỮ LIỆU
+
+Thư viện sqlite3 cho phép thao tác với cơ sở dữ liệu SQLite ngay trong Python.
+Truy vấn cần sử dụng tham số hóa để tránh lỗi SQL Injection.
+
+BÀI TẬP THỰC HÀNH
+
+Xây dựng ứng dụng quản lý sách đơn giản với các chức năng thêm, sửa, xóa và
+tìm kiếm. Áp dụng kiến trúc ba tầng để tách biệt giao diện và xử lý dữ liệu.

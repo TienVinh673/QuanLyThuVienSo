@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge, avatar, empty_state %}
+{% block title %}Độc giả{% endblock %}
+{% block eyebrow %}Quản lý tài khoản{% endblock %}
+{% block page_title %}Độc giả{% endblock %}
+{% block content %}
+
+<div class="toolbar">
+  <form class="toolbar-search" method="get" action="{{ url_for('admin.readers') }}">
+    <div class="search-field compact">
+      {{ icon('search', 16) }}
+      <input type="text" name="q" value="{{ keyword }}" placeholder="Tìm theo tên, username, email…">
+    </div>
+    <button class="btn btn-ghost btn-sm" type="submit">Tìm kiếm</button>
+    {% if keyword %}<a class="btn btn-quiet btn-sm" href="{{ url_for('admin.readers') }}">Xóa lọc</a>{% endif %}
+  </form>
+  <span class="section-note">{{ icon('users', 15) }} {{ readers|length }} tài khoản</span>
+</div>
+
+{% if readers %}
+  <div class="table-wrap card">
+    <table class="data-table">
+      <thead>
+        <tr><th>Độc giả</th><th>Email</th><th>Phiếu đang mở</th><th>Tham gia</th><th>Trạng thái</th><th class="align-right">Thao tác</th></tr>
+      </thead>
+      <tbody>
+        {% for reader in readers %}
+          <tr>
+            <td>
+              <div class="cell-user">
+                {{ avatar(reader) }}
+                <div>
+                  <strong>{{ reader.full_name }}</strong>
+                  <span class="muted">@{{ reader.username }}</span>
+                </div>
+              </div>
+            </td>
+            <td>{{ reader.email or '—' }}</td>
+            <td><span class="pill pill-soft">{{ reader.open_loans }} phiếu</span></td>
+            <td class="muted">{{ reader.created_at|date }}</td>
+            <td>
+              {% if reader.is_active %}{{ badge('Đang hoạt động', 'success') }}{% else %}{{ badge('Đã khóa', 'danger') }}{% endif %}
+            </td>
+            <td>
+              <form method="post" action="{{ url_for('admin.reader_toggle', user_id=reader.id) }}" data-confirm="{{ 'Khóa' if reader.is_active else 'Mở khóa' }} tài khoản {{ reader.full_name }}?">
+                <button class="btn {{ 'btn-danger-soft' if reader.is_active else 'btn-soft' }} btn-xs" type="submit">
+                  {{ icon('lock' if reader.is_active else 'check', 14) }} {{ 'Khóa' if reader.is_active else 'Mở khóa' }}
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  {{ empty_state('Không tìm thấy độc giả', 'Thử từ khóa khác hoặc chờ độc giả đăng ký tài khoản mới.', 'users') }}
+{% endif %}
+
+{% endblock %}

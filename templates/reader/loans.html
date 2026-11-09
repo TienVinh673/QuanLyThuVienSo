@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge, empty_state %}
+{% block title %}Phiếu mượn{% endblock %}
+{% block eyebrow %}Không gian đọc{% endblock %}
+{% block page_title %}Phiếu mượn của tôi{% endblock %}
+{% block content %}
+
+{% set active = records | selectattr('status', 'equalto', 'borrowed') | list %}
+{% set pending = records | selectattr('status', 'equalto', 'pending') | list %}
+{% set history = records | rejectattr('status', 'equalto', 'borrowed') | rejectattr('status', 'equalto', 'pending') | list %}
+
+<div class="stat-grid stat-grid-3">
+  <article class="stat-card">
+    <span class="stat-icon tint-info">{{ icon('swap', 20) }}</span>
+    <div><strong>{{ active|length }}</strong><span>Đang mượn</span></div>
+  </article>
+  <article class="stat-card">
+    <span class="stat-icon tint-warn">{{ icon('clock', 20) }}</span>
+    <div><strong>{{ pending|length }}</strong><span>Chờ duyệt</span></div>
+  </article>
+  <article class="stat-card">
+    <span class="stat-icon tint-success">{{ icon('check', 20) }}</span>
+    <div><strong>{{ history|length }}</strong><span>Đã hoàn tất</span></div>
+  </article>
+</div>
+
+<section class="section-block">
+  <div class="section-head">
+    <div><h2>Đang mượn</h2><p class="muted">Theo dõi hạn trả và mở tài liệu khi cần.</p></div>
+  </div>
+
+  {% if active %}
+    <div class="loan-grid">
+      {% for loan in active %}
+        <article class="loan-card {{ 'is-overdue' if loan.is_overdue }}">
+          <div class="loan-book">
+            <span class="mini-cover" style="--cover: {{ loan.book_cover_color }}">{{ loan.book_title[:1] }}</span>
+            <div>
+              <h3><a href="{{ url_for('book.detail', book_id=loan.book_id) }}">{{ loan.book_title }}</a></h3>
+              <p class="muted">{{ loan.book_author }}</p>
+            </div>
+            {{ badge('Quá hạn' if loan.is_overdue else 'Đang mượn', 'danger' if loan.is_overdue else 'info') }}
+          </div>
+          <div class="loan-dates">
+            <span>Mượn {{ loan.borrow_date|date }}</span>
+            <span>Hạn trả <strong>{{ loan.due_date|date }}</strong></span>
+          </div>
+          <div class="progress {{ 'progress-danger' if loan.is_overdue }}">
+            <span style="width: {{ loan.due_progress }}%"></span>
+          </div>
+          <p class="loan-remaining">
+            {% if loan.is_overdue %}
+              {{ icon('alert', 14) }} Đã quá hạn {{ -loan.days_left }} ngày
+            {% else %}
+              {{ icon('clock', 14) }} Còn {{ loan.days_left }} ngày
+            {% endif %}
+          </p>
+          <div class="loan-actions">
+            <a class="btn btn-primary btn-sm" href="{{ url_for('book.document', book_id=loan.book_id) }}">{{ icon('book', 15) }} Đọc tài liệu</a>
+            <form method="post" action="{{ url_for('borrow.return_loan', record_id=loan.id) }}" data-confirm="Xác nhận trả cuốn sách này?">
+              <button class="btn btn-ghost btn-sm" type="submit">{{ icon('swap', 15) }} Trả sách</button>
+            </form>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    {{ empty_state('Chưa mượn cuốn sách nào', 'Tìm một cuốn sách bạn thích và gửi yêu cầu mượn nhé.', 'book') }}
+  {% endif %}
+</section>
+
+{% if pending %}
+<section class="section-block">
+  <div class="section-head">
+    <div><h2>Yêu cầu đang chờ duyệt</h2><p class="muted">Thủ thư sẽ phản hồi qua mục Thông báo.</p></div>
+  </div>
+  <div class="card list-card">
+    {% for loan in pending %}
+      <div class="list-row">
+        <span class="mini-cover" style="--cover: {{ loan.book_cover_color }}">{{ loan.book_title[:1] }}</span>
+        <div class="list-row-main">
+          <strong>{{ loan.book_title }}</strong>
+          <span class="muted">Gửi lúc {{ loan.request_date|datetime }}</span>
+        </div>
+        {{ badge('Chờ duyệt', 'warn') }}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section-block">
+  <div class="section-head">
+    <div><h2>Lịch sử mượn trả</h2><p class="muted">{{ history|length }} phiếu đã hoàn tất.</p></div>
+  </div>
+  {% if history %}
+    <div class="table-wrap card">
+      <table class="data-table">
+        <thead>
+          <tr><th>Sách</th><th>Ngày yêu cầu</th><th>Ngày mượn</th><th>Hạn trả</th><th>Ngày trả</th><th>Trạng thái</th></tr>
+        </thead>
+        <tbody>
+          {% for loan in history %}
+            <tr>
+              <td>
+                <div class="cell-title">
+                  <span class="color-dot" style="--cover: {{ loan.book_cover_color }}"></span>
+                  <a href="{{ url_for('book.detail', book_id=loan.book_id) }}">{{ loan.book_title }}</a>
+                </div>
+              </td>
+              <td>{{ loan.request_date|date }}</td>
+              <td>{{ loan.borrow_date|date }}</td>
+              <td>{{ loan.due_date|date }}</td>
+              <td>{{ loan.return_date|date }}</td>
+              <td>{{ badge(loan.status_label, loan.status_tone) }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">Chưa có phiếu mượn nào đã hoàn tất.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

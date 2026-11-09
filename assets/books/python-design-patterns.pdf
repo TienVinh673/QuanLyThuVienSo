@@ -1,0 +1,58 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 2002 >>
+stream
+BT /F1 22 Tf 64 770 Td (PYTHON DESIGN PATTERNS) Tj ET
+BT /F1 11 Tf 64 744 Td (Software Engineering  |  Sample PDF document for the Digital Library demo) Tj ET
+0.55 0.55 0.55 RG 1 w 64 730 m 531 730 l S
+BT /F1 14 Tf 64 702 Td (Creational patterns) Tj ET
+BT /F1 11 Tf 64 680 Td (Singleton - ensure a class has only one instance. In this project,) Tj ET
+BT /F1 11 Tf 64 663 Td (DatabaseManager is a singleton that exposes database configuration.) Tj ET
+BT /F1 11 Tf 64 646 Td () Tj ET
+BT /F1 11 Tf 64 629 Td (Factory Method - define an interface for creating objects, but let) Tj ET
+BT /F1 11 Tf 64 612 Td (subclasses decide which class to instantiate. DocumentFactory returns) Tj ET
+BT /F1 11 Tf 64 595 Td (PDFDocument or TextDocument depending on the file extension.) Tj ET
+BT /F1 11 Tf 64 578 Td () Tj ET
+BT /F1 14 Tf 64 561 Td (Structural patterns) Tj ET
+BT /F1 11 Tf 64 539 Td (Facade - provide a unified interface to a set of subsystems.) Tj ET
+BT /F1 11 Tf 64 522 Td (LibraryFacade orchestrates borrow, return and document workflows.) Tj ET
+BT /F1 11 Tf 64 505 Td () Tj ET
+BT /F1 11 Tf 64 488 Td (Proxy - provide a surrogate that controls access to another object.) Tj ET
+BT /F1 11 Tf 64 471 Td (DocumentProxy validates the reader's loan before opening the real file.) Tj ET
+BT /F1 11 Tf 64 454 Td () Tj ET
+BT /F1 14 Tf 64 437 Td (Behavioral patterns) Tj ET
+BT /F1 11 Tf 64 415 Td (Observer - define a one-to-many dependency so that when one object) Tj ET
+BT /F1 11 Tf 64 398 Td (changes state, all dependents are notified. BorrowService notifies) Tj ET
+BT /F1 11 Tf 64 381 Td (AdminNotification and ReaderNotification observers.) Tj ET
+BT /F1 11 Tf 64 364 Td () Tj ET
+BT /F1 11 Tf 64 347 Td (Strategy - define a family of algorithms and make them interchangeable.) Tj ET
+BT /F1 11 Tf 64 330 Td (SearchStrategy supports title, author, ISBN and category searches.) Tj ET
+BT /F1 11 Tf 64 313 Td () Tj ET
+BT /F1 11 Tf 64 296 Td (This sample PDF is intentionally short and is used only for demo.) Tj ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2365
+%%EOF

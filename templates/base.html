@@ -1,0 +1,109 @@
+{% from "_macros.html" import icon, avatar, flash_messages %}
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Thư viện số{% endblock %} · Thư viện số</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23145c4c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5V5a2 2 0 0 1 2-2h13v18H6.5A2.5 2.5 0 0 1 4 19.5Z'/%3E%3Cpath d='M4 19.5A2.5 2.5 0 0 1 6.5 17H19'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{{ 'app-body' if current_user else 'auth-body' }}">
+  {% if current_user %}
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="{{ url_for('admin.dashboard') if current_user.is_admin else url_for('reader.home') }}">
+      <span class="brand-mark">{{ icon('book', 22) }}</span>
+      <span class="brand-text"><strong>Thư viện số</strong><small>Digital Library</small></span>
+    </a>
+
+    <nav class="nav">
+      {% if current_user.is_admin %}
+        <p class="nav-label">Quản trị</p>
+        <a class="nav-link {{ 'is-active' if request.endpoint == 'admin.dashboard' }}" href="{{ url_for('admin.dashboard') }}">
+          {{ icon('grid') }}<span>Tổng quan</span>
+        </a>
+        <a class="nav-link {{ 'is-active' if request.endpoint in ['admin.books', 'admin.book_new', 'admin.book_edit'] }}" href="{{ url_for('admin.books') }}">
+          {{ icon('book') }}<span>Quản lý sách</span>
+        </a>
+        <a class="nav-link {{ 'is-active' if request.endpoint == 'admin.categories' }}" href="{{ url_for('admin.categories') }}">
+          {{ icon('tags') }}<span>Danh mục</span>
+        </a>
+        <a class="nav-link {{ 'is-active' if request.endpoint == 'admin.readers' }}" href="{{ url_for('admin.readers') }}">
+          {{ icon('users') }}<span>Độc giả</span>
+        </a>
+        <a class="nav-link {{ 'is-active' if request.endpoint == 'admin.requests_list' }}" href="{{ url_for('admin.requests_list') }}">
+          {{ icon('inbox') }}<span>Yêu cầu mượn</span>
+          {% if pending_count %}<span class="nav-badge">{{ pending_count }}</span>{% endif %}
+        </a>
+        <a class="nav-link {{ 'is-active' if request.endpoint == 'admin.loans' }}" href="{{ url_for('admin.loans') }}">
+          {{ icon('swap') }}<span>Phiếu mượn</span>
+        </a>
+
+        <p class="nav-label">Hệ thống</p>
+        <a class="nav-link {{ 'is-active' if request.endpoint == 'reader.notifications' }}" href="{{ url_for('reader.notifications') }}">
+          {{ icon('bell') }}<span>Thông báo</span>
+          {% if unread_count %}<span class="nav-badge">{{ unread_count }}</span>{% endif %}
+        </a>
+      {% else %}
+        <p class="nav-label">Không gian đọc</p>
+        <a class="nav-link {{ 'is-active' if request.endpoint in ['reader.home', 'book.detail', 'book.document'] }}" href="{{ url_for('reader.home') }}">
+          {{ icon('grid') }}<span>Trang chủ</span>
+        </a>
+        <a class="nav-link {{ 'is-active' if request.endpoint == 'reader.loans' }}" href="{{ url_for('reader.loans') }}">
+          {{ icon('swap') }}<span>Phiếu mượn</span>
+        </a>
+        <a class="nav-link {{ 'is-active' if request.endpoint == 'reader.notifications' }}" href="{{ url_for('reader.notifications') }}">
+          {{ icon('bell') }}<span>Thông báo</span>
+          {% if unread_count %}<span class="nav-badge">{{ unread_count }}</span>{% endif %}
+        </a>
+
+        <p class="nav-label">Gợi ý</p>
+        <a class="nav-link" href="{{ url_for('reader.home', by='category') }}">
+          {{ icon('tags') }}<span>Khám phá thể loại</span>
+        </a>
+        <a class="nav-link" href="{{ url_for('reader.loans') }}">
+          {{ icon('clock') }}<span>Hạn trả sách</span>
+        </a>
+      {% endif %}
+    </nav>
+
+    <div class="sidebar-user">
+      {{ avatar(current_user) }}
+      <div class="sidebar-user-text">
+        <strong title="{{ current_user.full_name }}">{{ current_user.full_name }}</strong>
+        <span>{{ current_user.role_label }}</span>
+      </div>
+      <form method="post" action="{{ url_for('auth.logout') }}">
+        <button type="submit" class="logout-btn" title="Đăng xuất" aria-label="Đăng xuất">{{ icon('logout', 18) }}</button>
+      </form>
+    </div>
+  </aside>
+  {% endif %}
+
+  <div class="{{ 'app-main' if current_user else 'auth-main' }}">
+    {% if current_user %}
+    <header class="topbar">
+      <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Mở menu">{{ icon('menu', 22) }}</button>
+      <div class="page-heading">
+        <p class="eyebrow">{% block eyebrow %}Không gian đọc{% endblock %}</p>
+        <h1>{% block page_title %}Trang chủ{% endblock %}</h1>
+      </div>
+      <div class="topbar-actions">
+        <a class="icon-button" href="{{ url_for('reader.notifications') }}" aria-label="Thông báo">
+          {{ icon('bell', 19) }}
+          {% if unread_count %}<span class="ping">{{ unread_count if unread_count < 10 else '9+' }}</span>{% endif %}
+        </a>
+      </div>
+    </header>
+    {% endif %}
+
+    <main class="{{ 'page' if current_user else 'auth-main-inner' }}">
+      {{ flash_messages() }}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

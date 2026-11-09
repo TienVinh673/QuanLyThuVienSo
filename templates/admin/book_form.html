@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}{{ 'Thêm sách' if mode == 'create' else 'Sửa sách' }}{% endblock %}
+{% block eyebrow %}Quản lý sách{% endblock %}
+{% block page_title %}{{ 'Thêm sách mới' if mode == 'create' else 'Chỉnh sửa sách' }}{% endblock %}
+{% block content %}
+
+<a class="back-link" href="{{ url_for('admin.books') }}">{{ icon('arrow-left', 15) }} Về danh sách sách</a>
+
+<form method="post" class="form-layout" id="book-form">
+  <div class="form-main">
+    <section class="card">
+      <div class="card-head"><div><h3>Thông tin cơ bản</h3><p class="muted">Các trường có dấu * là bắt buộc.</p></div></div>
+      <div class="form-grid">
+        <div class="field span-2">
+          <label for="title">Tên sách *</label>
+          <input id="title" name="title" type="text" value="{{ form.get('title', '') }}" placeholder="VD: Nhà Giả Kim" required data-preview-title>
+        </div>
+        <div class="field">
+          <label for="author">Tác giả *</label>
+          <input id="author" name="author" type="text" value="{{ form.get('author', '') }}" placeholder="VD: Paulo Coelho" required data-preview-author>
+        </div>
+        <div class="field">
+          <label for="isbn">Mã ISBN *</label>
+          <input id="isbn" name="isbn" type="text" value="{{ form.get('isbn', '') }}" placeholder="978-604-1-00000-0" required>
+          <span class="hint">Mã ISBN là duy nhất trong hệ thống.</span>
+        </div>
+        <div class="field">
+          <label for="publisher">Nhà xuất bản</label>
+          <input id="publisher" name="publisher" type="text" value="{{ form.get('publisher', '') }}" placeholder="VD: NXB Văn học">
+        </div>
+        <div class="field">
+          <label for="publish_year">Năm xuất bản</label>
+          <input id="publish_year" name="publish_year" type="number" min="1000" max="2100" value="{{ form.get('publish_year', '') }}" placeholder="2024">
+        </div>
+        <div class="field span-2">
+          <label for="description">Mô tả</label>
+          <textarea id="description" name="description" rows="4" placeholder="Tóm tắt ngắn về nội dung cuốn sách…">{{ form.get('description', '') }}</textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><div><h3>Phân loại &amp; bản sao</h3><p class="muted">Danh mục giúp độc giả tìm sách nhanh hơn.</p></div></div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="category_id">Danh mục</label>
+          <select id="category_id" name="category_id">
+            <option value="">Chưa phân loại</option>
+            {% for category in categories %}
+              <option value="{{ category.id }}" {{ 'selected' if form.get('category_id')|string == category.id|string }}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label for="total_copies">Số bản sao *</label>
+          <input id="total_copies" name="total_copies" type="number" min="1" value="{{ form.get('total_copies', 1) }}" required>
+          <span class="hint">Số bản đang cho mượn sẽ được giữ nguyên khi sửa.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><div><h3>Tài liệu điện tử</h3><p class="muted">Hỗ trợ PDF và TXT trong thư mục assets.</p></div></div>
+      <div class="form-grid">
+        <div class="field span-2">
+          <label for="file_path">Đường dẫn tệp</label>
+          <input id="file_path" name="file_path" type="text" value="{{ form.get('file_path', '') }}" list="asset-files" placeholder="books/ten-sach.pdf">
+          <datalist id="asset-files">
+            {% for file in asset_files %}<option value="{{ file }}">{% endfor %}
+          </datalist>
+          <span class="hint">Đường dẫn tương đối, ví dụ <code>books/nha-gia-kim.pdf</code>. Để trống nếu chưa có tệp.</span>
+        </div>
+      </div>
+      {% if mode == 'edit' and book and book.file_path %}
+        <p class="hint">{{ icon('file', 13) }} Tệp hiện tại: <strong>{{ book.file_path }}</strong> · {{ book.file_extension }}</p>
+      {% endif %}
+    </section>
+  </div>
+
+  <aside class="form-side">
+    <section class="card preview-card">
+      <p class="card-label">Xem trước bìa sách</p>
+      <div class="book-cover book-cover-lg" style="--cover: {{ form.get('cover_color', '#145c4c') }}" id="cover-preview">
+        <span class="cover-category">{{ book.category_name if mode == 'edit' and book else 'Thể loại' }}</span>
+        <span class="cover-title" id="preview-title">{{ form.get('title', 'Tên sách') or 'Tên sách' }}</span>
+        <span class="cover-author" id="preview-author">{{ form.get('author', 'Tác giả') or 'Tác giả' }}</span>
+      </div>
+      <div class="field">
+        <label for="cover_color">Màu bìa</label>
+        <div class="color-row">
+          <input id="cover_color" name="cover_color" type="color" value="{{ form.get('cover_color', '#145c4c') }}">
+          <div class="swatches">
+            {% for color in cover_colors %}
+              <button type="button" class="swatch" style="--swatch: {{ color }}" data-color="{{ color }}" aria-label="Chọn màu {{ color }}"></button>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary btn-block" type="submit">{{ icon('check', 16) }} {{ 'Thêm sách' if mode == 'create' else 'Lưu thay đổi' }}</button>
+        <a class="btn btn-ghost btn-block" href="{{ url_for('admin.books') }}">Hủy</a>
+      </div>
+    </section>
+  </aside>
+</form>
+
+{% endblock %}

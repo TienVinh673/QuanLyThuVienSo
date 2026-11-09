@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+# library.db được tự sinh từ database/db_manager.sql khi app khởi động
+database/*.db
+.DS_Store

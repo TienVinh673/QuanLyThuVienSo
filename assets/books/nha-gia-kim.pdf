@@ -1,0 +1,55 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1737 >>
+stream
+BT /F1 22 Tf 64 770 Td (THE ALCHEMIST) Tj ET
+BT /F1 11 Tf 64 744 Td (Paulo Coelho  |  Sample PDF document for the Digital Library demo) Tj ET
+0.55 0.55 0.55 RG 1 w 64 730 m 531 730 l S
+BT /F1 14 Tf 64 702 Td (About this document) Tj ET
+BT /F1 11 Tf 64 680 Td (This is a sample PDF file used to demonstrate the Factory Method and) Tj ET
+BT /F1 11 Tf 64 663 Td (Proxy patterns in the Digital Library project.) Tj ET
+BT /F1 11 Tf 64 646 Td () Tj ET
+BT /F1 11 Tf 64 629 Td (The Alchemist tells the story of Santiago, an Andalusian shepherd boy) Tj ET
+BT /F1 11 Tf 64 612 Td (who travels in search of a worldly treasure. His journey leads him to) Tj ET
+BT /F1 11 Tf 64 595 Td (discover wisdom, love and the importance of following one's dream.) Tj ET
+BT /F1 11 Tf 64 578 Td () Tj ET
+BT /F1 14 Tf 64 561 Td (Main themes) Tj ET
+BT /F1 11 Tf 64 539 Td (1. Personal legend - every person has a purpose to pursue.) Tj ET
+BT /F1 11 Tf 64 522 Td (2. The language of the world - nature and signs speak to those who listen.) Tj ET
+BT /F1 11 Tf 64 505 Td (3. Courage - fear of suffering is worse than suffering itself.) Tj ET
+BT /F1 11 Tf 64 488 Td (4. Love - true love does not hold a person back from their path.) Tj ET
+BT /F1 11 Tf 64 471 Td () Tj ET
+BT /F1 14 Tf 64 454 Td (Why this file exists) Tj ET
+BT /F1 11 Tf 64 432 Td (The PDF format is handled by PDFDocument, created through) Tj ET
+BT /F1 11 Tf 64 415 Td (DocumentFactory. Readers can only open this file after their borrow) Tj ET
+BT /F1 11 Tf 64 398 Td (request has been approved, which is enforced by DocumentProxy.) Tj ET
+BT /F1 11 Tf 64 381 Td () Tj ET
+BT /F1 11 Tf 64 364 Td (Digital Library - Design Patterns final project) Tj ET
+BT /F1 11 Tf 64 347 Td (Ho Chi Minh City, 2026) Tj ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2100
+%%EOF

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Đăng ký{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  {% include "auth/_visual.html" %}
+
+  <main class="auth-panel">
+    <div class="auth-card auth-card-wide">
+      <span class="auth-badge">{{ icon('spark', 15) }} Thành viên mới</span>
+      <h2>Tạo tài khoản độc giả</h2>
+      <p class="muted">Chỉ mất một phút để bắt đầu mượn sách điện tử.</p>
+
+      <form method="post" class="form auth-form">
+        <div class="form-grid">
+          <div class="field span-2">
+            <label for="full_name">Họ và tên</label>
+            <input id="full_name" name="full_name" type="text" value="{{ form.full_name }}" placeholder="Nguyễn Văn A" required>
+          </div>
+          <div class="field">
+            <label for="username">Tên đăng nhập</label>
+            <input id="username" name="username" type="text" value="{{ form.username }}" placeholder="vd: giahan" autocomplete="username" required>
+            <span class="hint">3–30 ký tự, chữ, số, dấu chấm hoặc gạch dưới.</span>
+          </div>
+          <div class="field">
+            <label for="email">Email <span class="optional">(không bắt buộc)</span></label>
+            <input id="email" name="email" type="email" value="{{ form.email }}" placeholder="ban@example.com" autocomplete="email">
+          </div>
+          <div class="field">
+            <label for="password">Mật khẩu</label>
+            <input id="password" name="password" type="password" placeholder="Ít nhất 6 ký tự" autocomplete="new-password" required>
+          </div>
+          <div class="field">
+            <label for="confirm_password">Nhập lại mật khẩu</label>
+            <input id="confirm_password" name="confirm_password" type="password" placeholder="Nhập lại mật khẩu" autocomplete="new-password" required>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">
+          <span>Tạo tài khoản</span>{{ icon('arrow-right', 17) }}
+        </button>
+      </form>
+
+      <p class="auth-switch">Đã có tài khoản? <a href="{{ url_for('auth.login') }}">Đăng nhập</a></p>
+    </div>
+  </main>
+</div>
+{% endblock %}

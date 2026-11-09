@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}{{ title }}{% endblock %}
+{% block eyebrow %}Thông báo hệ thống{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="error-wrap">
+  <div class="error-card">
+    <span class="error-icon">{{ icon('shield' if code == 403 else 'alert', 30) }}</span>
+    <p class="error-code">{{ code }}</p>
+    <h2>{{ title }}</h2>
+    <p class="muted">{{ message }}</p>
+    <div class="error-actions">
+      {% if current_user %}
+        <a class="btn btn-primary" href="{{ url_for('admin.dashboard') if current_user.is_admin else url_for('reader.home') }}">{{ icon('arrow-left', 16) }} Về trang chính</a>
+      {% else %}
+        <a class="btn btn-primary" href="{{ url_for('auth.login') }}">Đến trang đăng nhập</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

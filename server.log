@@ -1,0 +1,116 @@
+ * Serving Flask app 'main'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 458-893-320
+127.0.0.1 - - [09/Nov/2026 13:23:16] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:23:20] "GET / HTTP/1.1" 302 -
+127.0.0.1 - - [09/Nov/2026 13:23:20] "GET /static/css/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:26:19] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:26:19] "GET /static/css/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:26:19] "GET /static/js/app.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:26:36] "POST /login HTTP/1.1" 302 -
+127.0.0.1 - - [09/Nov/2026 13:26:36] "GET /admin HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:26:36] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:26:36] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:26:51] "GET /admin/books HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:26:51] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:26:51] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:27:04] "GET /admin/books?q=so+do&category= HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:27:04] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:27:04] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:27:40] "POST /logout HTTP/1.1" 302 -
+127.0.0.1 - - [09/Nov/2026 13:27:40] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:27:43] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:27:43] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:27:43] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:27:52] "POST /login HTTP/1.1" 302 -
+127.0.0.1 - - [09/Nov/2026 13:27:52] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:27:52] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:27:52] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:07] "GET /?q=so+do&by=all HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:28:07] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:07] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:17] "GET /books/3 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:28:17] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:17] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:25] "GET /books/2 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:28:25] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:25] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:36] "GET /documents/2 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:28:36] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:36] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:43] "GET /documents/3 HTTP/1.1" 403 -
+127.0.0.1 - - [09/Nov/2026 13:28:43] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:43] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:50] "GET /me/loans HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:28:50] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:50] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:57] "GET /me/notifications HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:28:57] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:28:57] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:04] "POST /logout HTTP/1.1" 302 -
+127.0.0.1 - - [09/Nov/2026 13:29:04] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:29:07] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:29:07] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:07] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:17] "POST /login HTTP/1.1" 302 -
+127.0.0.1 - - [09/Nov/2026 13:29:17] "GET /admin HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:29:17] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:17] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:21] "GET /admin/requests HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:29:21] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:21] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:28] "GET /admin/books/new HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:29:28] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:28] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:37] "GET /admin/categories HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:29:37] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:37] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:45] "GET /admin/books?q=S\u1ed1+\u0110\u1ecf HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:29:45] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:45] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:52] "GET /khong-ton-tai HTTP/1.1" 404 -
+127.0.0.1 - - [09/Nov/2026 13:29:52] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:29:52] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:30:06] "GET /admin HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:30:06] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:30:06] "GET /static/js/app.js HTTP/1.1" 304 -
+ * Detected change in 'D:\\Nhom11MTk\\services\\book_service.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 458-893-320
+ * Detected change in 'D:\\Nhom11MTk\\tests\\test_book.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 458-893-320
+ * Detected change in 'D:\\Nhom11MTk\\tests\\conftest.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 458-893-320
+127.0.0.1 - - [09/Nov/2026 13:39:31] "GET /admin/books?q=so+do HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:39:31] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:39:31] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:39:41] "GET /books/10 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:39:41] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:39:41] "GET /static/css/style.css HTTP/1.1" 304 -
+ * Detected change in 'D:\\Nhom11MTk\\tests\\conftest.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 458-893-320
+127.0.0.1 - - [09/Nov/2026 13:41:40] "GET /books/10 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 13:41:40] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 13:41:40] "GET /static/js/app.js HTTP/1.1" 304 -
+ * Detected change in 'D:\\Nhom11MTk\\tests\\conftest.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 458-893-320
+127.0.0.1 - - [09/Nov/2026 14:00:15] "GET /books/10 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 14:00:15] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 14:00:15] "GET /static/css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 14:00:24] "GET /admin/books?q=so+do HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 14:00:24] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [09/Nov/2026 14:00:24] "GET /static/css/style.css HTTP/1.1" 304 -

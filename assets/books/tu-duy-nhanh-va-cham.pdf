@@ -1,0 +1,51 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1463 >>
+stream
+BT /F1 22 Tf 64 770 Td (THINKING, FAST AND SLOW) Tj ET
+BT /F1 11 Tf 64 744 Td (Daniel Kahneman  |  Sample PDF document for the Digital Library demo) Tj ET
+0.55 0.55 0.55 RG 1 w 64 730 m 531 730 l S
+BT /F1 14 Tf 64 702 Td (Overview) Tj ET
+BT /F1 11 Tf 64 680 Td (This sample PDF summarizes two ways of thinking described in the book:) Tj ET
+BT /F1 11 Tf 64 663 Td (System 1 operates quickly and intuitively, while System 2 is slower,) Tj ET
+BT /F1 11 Tf 64 646 Td (deliberate and analytical.) Tj ET
+BT /F1 11 Tf 64 629 Td () Tj ET
+BT /F1 14 Tf 64 612 Td (Key ideas) Tj ET
+BT /F1 11 Tf 64 590 Td (1. Anchoring - the first number we see influences our judgement.) Tj ET
+BT /F1 11 Tf 64 573 Td (2. Loss aversion - losses feel stronger than equivalent gains.) Tj ET
+BT /F1 11 Tf 64 556 Td (3. Availability heuristic - vivid events feel more likely.) Tj ET
+BT /F1 11 Tf 64 539 Td (4. Overconfidence - we trust our intuition more than we should.) Tj ET
+BT /F1 11 Tf 64 522 Td () Tj ET
+BT /F1 14 Tf 64 505 Td (Application for library readers) Tj ET
+BT /F1 11 Tf 64 483 Td (When choosing a book, readers may rely on covers, titles or recent) Tj ET
+BT /F1 11 Tf 64 466 Td (recommendations. A search tool with multiple strategies helps readers) Tj ET
+BT /F1 11 Tf 64 449 Td (make decisions based on relevant criteria instead of first impressions.) Tj ET
+BT /F1 11 Tf 64 432 Td () Tj ET
+BT /F1 11 Tf 64 415 Td (Sample content only. Digital Library final project, 2026.) Tj ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1826
+%%EOF

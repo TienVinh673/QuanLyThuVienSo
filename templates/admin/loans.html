@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge, empty_state %}
+{% block title %}Phiếu mượn{% endblock %}
+{% block eyebrow %}Theo dõi lưu thông{% endblock %}
+{% block page_title %}Phiếu mượn đang hoạt động{% endblock %}
+{% block content %}
+
+<div class="stat-grid stat-grid-3">
+  <article class="stat-card">
+    <span class="stat-icon tint-info">{{ icon('swap', 20) }}</span>
+    <div><strong>{{ stats.borrowed }}</strong><span>Đang mượn</span><small>Tổng phiếu chưa trả</small></div>
+  </article>
+  <article class="stat-card">
+    <span class="stat-icon tint-danger">{{ icon('alert', 20) }}</span>
+    <div><strong>{{ stats.overdue }}</strong><span>Quá hạn</span><small>Cần nhắc trả sách</small></div>
+  </article>
+  <article class="stat-card">
+    <span class="stat-icon tint-success">{{ icon('check', 20) }}</span>
+    <div><strong>{{ stats.returned }}</strong><span>Đã trả</span><small>Tổng phiếu hoàn tất</small></div>
+  </article>
+</div>
+
+<div class="section-head">
+  <div><h2>Danh sách phiếu đang mượn</h2><p class="muted">Ghi nhận trả sách khi độc giả hoàn tất.</p></div>
+  <a class="btn btn-ghost btn-sm" href="{{ url_for('admin.requests_list', status='all') }}">Xem toàn bộ lịch sử</a>
+</div>
+
+{% if records %}
+  <div class="table-wrap card">
+    <table class="data-table">
+      <thead>
+        <tr><th>Độc giả</th><th>Sách</th><th>Ngày mượn</th><th>Hạn trả</th><th>Tiến độ</th><th>Trạng thái</th><th class="align-right">Thao tác</th></tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+          <tr class="{{ 'row-overdue' if record.is_overdue }}">
+            <td><strong>{{ record.reader_name }}</strong><span class="cell-sub">@{{ record.reader_username }}</span></td>
+            <td>
+              <div class="cell-title">
+                <span class="color-dot" style="--cover: {{ record.book_cover_color }}"></span>
+                <span>{{ record.book_title }}</span>
+              </div>
+            </td>
+            <td class="muted">{{ record.borrow_date|date }}</td>
+            <td>{{ record.due_date|date }}</td>
+            <td>
+              <div class="progress progress-sm {{ 'progress-danger' if record.is_overdue }}">
+                <span style="width: {{ record.due_progress }}%"></span>
+              </div>
+              <span class="cell-sub">
+                {% if record.is_overdue %}Quá hạn {{ -record.days_left }} ngày{% else %}Còn {{ record.days_left }} ngày{% endif %}
+              </span>
+            </td>
+            <td>{{ badge('Quá hạn' if record.is_overdue else 'Đang mượn', 'danger' if record.is_overdue else 'info') }}</td>
+            <td>
+              <form method="post" action="{{ url_for('borrow.return_loan', record_id=record.id) }}" data-confirm="Ghi nhận đã nhận lại sách “{{ record.book_title }}”?">
+                <button class="btn btn-ghost btn-xs" type="submit">{{ icon('check', 13) }} Nhận trả</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  {{ empty_state('Chưa có phiếu đang mượn', 'Khi yêu cầu mượn được duyệt, phiếu sẽ xuất hiện tại đây.', 'swap') }}
+{% endif %}
+
+{% endblock %}

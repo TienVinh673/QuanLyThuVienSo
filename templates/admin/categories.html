@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, empty_state %}
+{% block title %}Danh mục{% endblock %}
+{% block eyebrow %}Quản lý kho sách{% endblock %}
+{% block page_title %}Danh mục sách{% endblock %}
+{% block content %}
+
+<div class="two-col-layout">
+  <section class="card">
+    <div class="card-head">
+      <div><h3>Danh sách danh mục</h3><p class="muted">{{ categories|length }} nhóm thể loại</p></div>
+    </div>
+    {% if categories %}
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Danh mục</th><th>Mô tả</th><th>Đầu sách</th><th class="align-right">Thao tác</th></tr></thead>
+          <tbody>
+            {% for category in categories %}
+              <tr>
+                <td><strong>{{ category.name }}</strong></td>
+                <td class="muted">{{ category.description or '—' }}</td>
+                <td><span class="pill pill-soft">{{ category.book_count }} sách</span></td>
+                <td>
+                  <div class="row-actions">
+                    <a class="icon-button quiet" href="{{ url_for('admin.categories', edit=category.id) }}" title="Sửa">{{ icon('edit', 16) }}</a>
+                    <form method="post" action="{{ url_for('admin.category_delete', category_id=category.id) }}" data-confirm="Xóa danh mục “{{ category.name }}”?">
+                      <button class="icon-button quiet danger" type="submit" title="Xóa">{{ icon('trash', 16) }}</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      {{ empty_state('Chưa có danh mục', 'Tạo danh mục đầu tiên ở khung bên cạnh.', 'tags') }}
+    {% endif %}
+  </section>
+
+  <aside class="card sticky-card">
+    <div class="card-head">
+      <div>
+        <h3>{{ 'Sửa danh mục' if editing else 'Thêm danh mục' }}</h3>
+        <p class="muted">{{ 'Cập nhật tên và mô tả.' if editing else 'Tạo nhóm thể loại mới cho kho sách.' }}</p>
+      </div>
+    </div>
+    <form method="post" class="form" action="{{ url_for('admin.category_edit', category_id=editing.id) if editing else url_for('admin.categories') }}">
+      <div class="field">
+        <label for="name">Tên danh mục *</label>
+        <input id="name" name="name" type="text" value="{{ form.name }}" placeholder="VD: Lịch sử" required>
+      </div>
+      <div class="field">
+        <label for="description">Mô tả</label>
+        <textarea id="description" name="description" rows="3" placeholder="Mô tả ngắn về nhóm sách…">{{ form.description }}</textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary btn-block" type="submit">{{ icon('check', 16) }} {{ 'Lưu thay đổi' if editing else 'Thêm danh mục' }}</button>
+        {% if editing %}<a class="btn btn-ghost btn-block" href="{{ url_for('admin.categories') }}">Hủy chỉnh sửa</a>{% endif %}
+      </div>
+    </form>
+  </aside>
+</div>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge, empty_state %}
+{% block title %}Quản lý sách{% endblock %}
+{% block eyebrow %}Danh mục tài liệu{% endblock %}
+{% block page_title %}Quản lý sách{% endblock %}
+{% block content %}
+
+<div class="toolbar">
+  <form class="toolbar-search" method="get" action="{{ url_for('admin.books') }}">
+    <div class="search-field compact">
+      {{ icon('search', 16) }}
+      <input type="text" name="q" value="{{ keyword }}" placeholder="Tìm theo tên, tác giả, ISBN…">
+    </div>
+    <select name="category" class="select-sm">
+      <option value="">Tất cả danh mục</option>
+      {% for category in categories %}
+        <option value="{{ category.id }}" {{ 'selected' if category_id == category.id }}>{{ category.name }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn btn-ghost btn-sm" type="submit">Lọc</button>
+    {% if keyword or category_id %}
+      <a class="btn btn-quiet btn-sm" href="{{ url_for('admin.books') }}">Xóa lọc</a>
+    {% endif %}
+  </form>
+  <a class="btn btn-primary btn-sm" href="{{ url_for('admin.book_new') }}">{{ icon('plus', 16) }} Thêm sách</a>
+</div>
+
+{% if books %}
+  <div class="table-wrap card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Sách</th>
+          <th>ISBN</th>
+          <th>Danh mục</th>
+          <th>Bản sao</th>
+          <th>Tệp</th>
+          <th>Trạng thái</th>
+          <th class="align-right">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+          <tr>
+            <td>
+              <div class="cell-book">
+                <span class="mini-cover" style="--cover: {{ book.cover_color }}">{{ book.title[:1] }}</span>
+                <div>
+                  <a class="cell-title-link" href="{{ url_for('book.detail', book_id=book.id) }}">{{ book.title }}</a>
+                  <span class="muted">{{ book.author }}</span>
+                </div>
+              </div>
+            </td>
+            <td class="mono">{{ book.isbn }}</td>
+            <td>{{ book.category_name }}</td>
+            <td>
+              <span class="copies">{{ book.available_copies }}<small>/{{ book.total_copies }}</small></span>
+            </td>
+            <td><span class="file-chip">{{ book.file_extension }}</span></td>
+            <td>
+              {% if book.is_available %}{{ badge('Còn sách', 'success') }}{% else %}{{ badge('Hết sách', 'danger') }}{% endif %}
+            </td>
+            <td>
+              <div class="row-actions">
+                <a class="icon-button quiet" href="{{ url_for('admin.book_edit', book_id=book.id) }}" title="Sửa">{{ icon('edit', 16) }}</a>
+                <form method="post" action="{{ url_for('admin.book_delete', book_id=book.id) }}" data-confirm="Xóa sách “{{ book.title }}”? Hành động này không thể hoàn tác.">
+                  <button class="icon-button quiet danger" type="submit" title="Xóa">{{ icon('trash', 16) }}</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="table-note">Hiển thị {{ books|length }} đầu sách{% if keyword %} cho từ khóa “{{ keyword }}”{% endif %}.</p>
+{% else %}
+  {{ empty_state('Chưa có sách phù hợp', 'Thêm sách mới hoặc thay đổi bộ lọc tìm kiếm.', 'book') }}
+{% endif %}
+
+{% endblock %}

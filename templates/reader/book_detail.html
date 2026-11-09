@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, cover, badge %}
+{% block title %}{{ book.title }}{% endblock %}
+{% block eyebrow %}Chi tiết sách{% endblock %}
+{% block page_title %}{{ book.title }}{% endblock %}
+{% block content %}
+
+<a class="back-link" href="{{ url_for('admin.books') if current_user.is_admin else url_for('reader.home') }}">
+  {{ icon('arrow-left', 15) }} {{ 'Về quản lý sách' if current_user.is_admin else 'Về trang chủ' }}
+</a>
+
+<div class="detail-grid">
+  <div class="detail-cover-col">
+    {{ cover(book, 'lg') }}
+    <div class="detail-cover-meta">
+      <div><span>Định dạng</span><strong>{{ book.file_extension }}</strong></div>
+      <div><span>Bản sao</span><strong>{{ book.available_copies }}/{{ book.total_copies }}</strong></div>
+      <div><span>Trạng thái</span>
+        {% if book.is_available %}{{ badge('Sẵn sàng', 'success') }}{% else %}{{ badge('Hết sách', 'danger') }}{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-main">
+    <div class="detail-topline">
+      <span class="pill">{{ book.category_name }}</span>
+      <span class="tiny">ISBN {{ book.isbn }}</span>
+    </div>
+    <h2 class="detail-title">{{ book.title }}</h2>
+    <p class="detail-author">{{ icon('user', 15) }} {{ book.author }}</p>
+    <p class="detail-desc">{{ book.description or 'Chưa có mô tả cho cuốn sách này.' }}</p>
+
+    <dl class="meta-grid">
+      <div><dt>Nhà xuất bản</dt><dd>{{ book.publisher or '—' }}</dd></div>
+      <div><dt>Năm xuất bản</dt><dd>{{ book.publish_year or '—' }}</dd></div>
+      <div><dt>Định dạng tệp</dt><dd>{{ book.file_extension }}</dd></div>
+      <div><dt>Mã ISBN</dt><dd>{{ book.isbn }}</dd></div>
+      <div><dt>Tổng bản sao</dt><dd>{{ book.total_copies }}</dd></div>
+      <div><dt>Còn lại</dt><dd>{{ book.available_copies }}</dd></div>
+    </dl>
+
+    <div class="access-note {{ 'is-open' if can_open else '' }}">
+      {{ icon('shield' if can_open else 'lock', 17) }}
+      <span>{{ access_message }}</span>
+    </div>
+
+    <div class="detail-actions">
+      {% if current_user.is_admin %}
+        <a class="btn btn-primary" href="{{ url_for('admin.book_edit', book_id=book.id) }}">{{ icon('edit', 16) }} Sửa thông tin</a>
+        {% if can_open %}
+          <a class="btn btn-ghost" href="{{ url_for('book.document', book_id=book.id) }}">{{ icon('eye', 16) }} Mở tài liệu</a>
+        {% endif %}
+      {% else %}
+        {% if can_open %}
+          <a class="btn btn-primary" href="{{ url_for('book.document', book_id=book.id) }}">{{ icon('book', 16) }} Đọc tài liệu</a>
+          {% if active_loan %}
+            <form method="post" action="{{ url_for('borrow.return_loan', record_id=active_loan.id) }}" data-confirm="Xác nhận trả cuốn sách này?">
+              <button class="btn btn-ghost" type="submit">{{ icon('swap', 16) }} Trả sách</button>
+            </form>
+          {% endif %}
+        {% elif open_record %}
+          <a class="btn btn-soft" href="{{ url_for('reader.loans') }}">{{ icon('clock', 16) }} Yêu cầu đang chờ duyệt</a>
+        {% elif book.is_available %}
+          <form method="post" action="{{ url_for('borrow.request_borrow', book_id=book.id) }}">
+            <button class="btn btn-primary" type="submit">{{ icon('book', 16) }} Gửi yêu cầu mượn</button>
+          </form>
+        {% else %}
+          <button class="btn btn-ghost" type="button" disabled>Hiện đã hết bản sao</button>
+        {% endif %}
+      {% endif %}
+      <a class="btn btn-ghost" href="{{ url_for('reader.home') }}">Tiếp tục tìm sách</a>
+    </div>
+
+    {% if current_user.is_admin %}
+      <p class="hint">Bạn đang xem với quyền thủ thư: tài liệu luôn mở được, kể cả khi chưa có phiếu mượn.</p>
+    {% elif open_record and open_record.status == 'pending' %}
+      <p class="hint">Yêu cầu gửi lúc {{ open_record.request_date|datetime }}. Thủ thư sẽ phản hồi qua mục Thông báo.</p>
+    {% elif active_loan %}
+      <p class="hint">Bạn đang mượn cuốn này · hạn trả {{ active_loan.due_date|date }}{% if active_loan.is_overdue %} · <span class="text-danger">đã quá hạn</span>{% endif %}.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

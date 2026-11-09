@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge, empty_state %}
+{% block title %}Yêu cầu mượn{% endblock %}
+{% block eyebrow %}Quy trình mượn sách{% endblock %}
+{% block page_title %}Yêu cầu mượn{% endblock %}
+{% block content %}
+
+<div class="stat-strip">
+  <div class="stat-strip-item"><span class="dot tone-warn"></span><strong>{{ stats.pending }}</strong> chờ duyệt</div>
+  <div class="stat-strip-item"><span class="dot tone-info"></span><strong>{{ stats.borrowed }}</strong> đang mượn</div>
+  <div class="stat-strip-item"><span class="dot tone-success"></span><strong>{{ stats.returned }}</strong> đã trả</div>
+  <div class="stat-strip-item"><span class="dot tone-danger"></span><strong>{{ stats.overdue }}</strong> quá hạn</div>
+</div>
+
+<div class="tabs">
+  <a class="tab {{ 'is-active' if status == 'pending' }}" href="{{ url_for('admin.requests_list', status='pending') }}">Chờ duyệt <span>{{ stats.pending }}</span></a>
+  <a class="tab {{ 'is-active' if status == 'borrowed' }}" href="{{ url_for('admin.requests_list', status='borrowed') }}">Đang mượn <span>{{ stats.borrowed }}</span></a>
+  <a class="tab {{ 'is-active' if status == 'returned' }}" href="{{ url_for('admin.requests_list', status='returned') }}">Đã trả <span>{{ stats.returned }}</span></a>
+  <a class="tab {{ 'is-active' if status == 'rejected' }}" href="{{ url_for('admin.requests_list', status='rejected') }}">Từ chối <span>{{ stats.rejected }}</span></a>
+  <a class="tab {{ 'is-active' if status == 'all' }}" href="{{ url_for('admin.requests_list', status='all') }}">Tất cả</a>
+</div>
+
+{% if records %}
+  <div class="table-wrap card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Độc giả</th><th>Sách</th><th>Yêu cầu lúc</th><th>Hạn trả</th><th>Trạng thái</th><th>Xử lý</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+          <tr>
+            <td>
+              <strong>{{ record.reader_name }}</strong>
+              <span class="cell-sub">@{{ record.reader_username }}</span>
+            </td>
+            <td>
+              <div class="cell-title">
+                <span class="color-dot" style="--cover: {{ record.book_cover_color }}"></span>
+                <span>{{ record.book_title }}</span>
+              </div>
+            </td>
+            <td class="muted">{{ record.request_date|datetime }}</td>
+            <td>
+              {% if record.due_date %}
+                {{ record.due_date|date }}
+                {% if record.is_overdue %}<span class="cell-sub text-danger">Quá hạn</span>{% endif %}
+              {% else %}—{% endif %}
+            </td>
+            <td>{{ badge(record.status_label, record.status_tone) }}</td>
+            <td>
+              {% if record.status == 'pending' %}
+                <form method="post" class="decision-form">
+                  <input class="input-xs" name="note" type="text" placeholder="Ghi chú (nếu có)">
+                  <button class="btn btn-primary btn-xs" type="submit" formaction="{{ url_for('borrow.approve', record_id=record.id) }}">{{ icon('check', 13) }} Duyệt</button>
+                  <button class="btn btn-danger-soft btn-xs" type="submit" formaction="{{ url_for('borrow.reject', record_id=record.id) }}" data-confirm="Từ chối yêu cầu mượn “{{ record.book_title }}”?">{{ icon('x', 13) }} Từ chối</button>
+                </form>
+              {% elif record.status == 'borrowed' %}
+                <form method="post" action="{{ url_for('borrow.return_loan', record_id=record.id) }}" data-confirm="Ghi nhận độc giả đã trả sách “{{ record.book_title }}”?">
+                  <button class="btn btn-ghost btn-xs" type="submit">{{ icon('swap', 13) }} Nhận trả</button>
+                </form>
+              {% elif record.note %}
+                <span class="muted small">{{ record.note }}</span>
+              {% else %}
+                <span class="muted">—</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  {{ empty_state('Không có phiếu nào', 'Chưa có phiếu mượn ở trạng thái này.', 'inbox') }}
+{% endif %}
+
+{% endblock %}

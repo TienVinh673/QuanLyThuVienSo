@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge, empty_state %}
+{% block title %}Tổng quan{% endblock %}
+{% block eyebrow %}Bảng điều khiển{% endblock %}
+{% block page_title %}Tổng quan thư viện{% endblock %}
+{% block content %}
+
+<div class="page-intro">
+  <div>
+    <h2>Chào {{ current_user.full_name }},</h2>
+    <p class="muted">Đây là tình hình hoạt động của thư viện. Ưu tiên xử lý các yêu cầu mượn đang chờ và nhắc trả sách quá hạn.</p>
+  </div>
+  <div class="quick-actions">
+    <a class="btn btn-ghost" href="{{ url_for('admin.requests_list') }}">{{ icon('inbox', 16) }} Duyệt yêu cầu</a>
+    <a class="btn btn-primary" href="{{ url_for('admin.book_new') }}">{{ icon('plus', 16) }} Thêm sách</a>
+  </div>
+</div>
+
+<div class="stat-grid">
+  <a class="stat-card" href="{{ url_for('admin.books') }}">
+    <span class="stat-icon tint-primary">{{ icon('book', 20) }}</span>
+    <div><strong>{{ book_stats.book_titles }}</strong><span>Đầu sách</span><small>{{ book_stats.copies }} bản sao</small></div>
+  </a>
+  <a class="stat-card" href="{{ url_for('admin.readers') }}">
+    <span class="stat-icon tint-info">{{ icon('users', 20) }}</span>
+    <div><strong>{{ readers }}</strong><span>Độc giả</span><small>Tài khoản đã đăng ký</small></div>
+  </a>
+  <a class="stat-card" href="{{ url_for('admin.loans') }}">
+    <span class="stat-icon tint-success">{{ icon('swap', 20) }}</span>
+    <div><strong>{{ borrow_stats.borrowed }}</strong><span>Đang mượn</span><small>{{ borrow_stats.overdue }} phiếu quá hạn</small></div>
+  </a>
+  <a class="stat-card" href="{{ url_for('admin.requests_list') }}">
+    <span class="stat-icon tint-warn">{{ icon('clock', 20) }}</span>
+    <div><strong>{{ borrow_stats.pending }}</strong><span>Chờ duyệt</span><small>Cần xử lý</small></div>
+  </a>
+</div>
+
+{% if borrow_stats.overdue %}
+<div class="alert-banner">
+  <span class="alert-icon">{{ icon('alert', 20) }}</span>
+  <div>
+    <strong>{{ borrow_stats.overdue }} phiếu mượn đã quá hạn</strong>
+    <p>Hãy kiểm tra danh sách phiếu mượn và nhắc độc giả trả sách.</p>
+  </div>
+  <a class="btn btn-ghost btn-sm" href="{{ url_for('admin.loans') }}">Xem phiếu mượn</a>
+</div>
+{% endif %}
+
+<div class="dashboard-grid">
+  <section class="card">
+    <div class="card-head">
+      <div><h3>Yêu cầu mượn chờ duyệt</h3><p class="muted">Mới nhất trước</p></div>
+      <a class="card-link" href="{{ url_for('admin.requests_list') }}">Tất cả {{ icon('arrow-right', 13) }}</a>
+    </div>
+    {% if pending_requests %}
+      <div class="list-card">
+        {% for record in pending_requests %}
+          <div class="list-row">
+            <span class="mini-cover" style="--cover: {{ record.book_cover_color }}">{{ record.book_title[:1] }}</span>
+            <div class="list-row-main">
+              <strong>{{ record.book_title }}</strong>
+              <span class="muted">{{ record.reader_name }} · {{ record.request_date|datetime }}</span>
+            </div>
+            <a class="btn btn-soft btn-xs" href="{{ url_for('admin.requests_list') }}">Duyệt</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      {{ empty_state('Không có yêu cầu chờ', 'Mọi yêu cầu mượn đã được xử lý.', 'check') }}
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div><h3>Phân bố danh mục</h3><p class="muted">Số đầu sách theo thể loại</p></div>
+    </div>
+    {% set max_count = category_distribution | map(attribute='total') | max %}
+    <div class="bar-list">
+      {% for item in category_distribution %}
+        <div class="bar-row">
+          <span>{{ item.name }}</span>
+          <div class="bar-track"><span style="width: {{ (item.total / (max_count or 1) * 100) | round }}%"></span></div>
+          <strong>{{ item.total }}</strong>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div><h3>Phiếu mượn gần đây</h3><p class="muted">Hoạt động mới nhất</p></div>
+      <a class="card-link" href="{{ url_for('admin.requests_list', status='all') }}">Xem tất cả {{ icon('arrow-right', 13) }}</a>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table compact">
+        <thead><tr><th>Độc giả</th><th>Sách</th><th>Trạng thái</th><th>Thời gian</th></tr></thead>
+        <tbody>
+          {% for record in recent_records %}
+            <tr>
+              <td>{{ record.reader_name }}</td>
+              <td>{{ record.book_title }}</td>
+              <td>{{ badge(record.status_label, record.status_tone) }}</td>
+              <td class="muted">{{ record.request_date|date }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div><h3>Hoạt động gần đây</h3><p class="muted">Nhật ký hệ thống</p></div>
+    </div>
+    <div class="timeline">
+      {% for log in recent_activity %}
+        <div class="timeline-item">
+          <span class="timeline-dot"></span>
+          <div>
+            <strong>{{ log.action }}</strong>
+            <p>{{ log.detail }}</p>
+            <span class="muted">{{ log.actor_name }} · {{ log.created_at|datetime }}</span>
+          </div>
+        </div>
+      {% else %}
+        <p class="muted">Chưa có hoạt động nào.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+{% endblock %}

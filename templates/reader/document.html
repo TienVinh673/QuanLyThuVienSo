@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge %}
+{% block title %}Đọc · {{ book.title }}{% endblock %}
+{% block eyebrow %}Tài liệu điện tử{% endblock %}
+{% block page_title %}{{ book.title }}{% endblock %}
+{% block content %}
+
+<a class="back-link" href="{{ url_for('book.detail', book_id=book.id) }}">
+  {{ icon('arrow-left', 15) }} Về chi tiết sách
+</a>
+
+<div class="doc-head card">
+  <div class="doc-cover" style="--cover: {{ book.cover_color }}">{{ book.title[:1] }}</div>
+  <div class="doc-head-text">
+    <div class="doc-title-row">
+      <h2>{{ book.title }}</h2>
+      {{ badge(info.kind, 'info') }}
+      {{ badge('Đã xác thực quyền', 'success') }}
+    </div>
+    <p class="muted">{{ book.author }} · {{ info.filename }} · {{ info.size }}</p>
+    <p class="hint">{{ icon('shield', 13) }} Tài liệu được mở qua DocumentProxy — quyền truy cập đã được kiểm tra ở tầng nghiệp vụ.</p>
+  </div>
+  <div class="doc-head-actions">
+    <a class="btn btn-primary" href="{{ url_for('book.document_file', book_id=book.id) }}" target="_blank" rel="noopener">
+      {{ icon('download', 16) }} {{ 'Mở tệp PDF' if info.extension == 'PDF' else 'Tải tệp' }}
+    </a>
+  </div>
+</div>
+
+{% if info.supports_text and text %}
+  <article class="doc-paper">
+    <div class="doc-paper-inner">{{ text }}</div>
+  </article>
+{% else %}
+  <section class="pdf-panel">
+    <div class="pdf-badge">
+      <span>{{ info.extension }}</span>
+      <small>{{ info.size }}</small>
+    </div>
+    <div class="pdf-text">
+      <h3>Tài liệu {{ info.kind }}</h3>
+      <p>Định dạng PDF được mở trực tiếp bằng trình đọc PDF của trình duyệt. Nhấn nút bên dưới để mở tệp trong tab mới.</p>
+      <a class="btn btn-ghost" href="{{ url_for('book.document_file', book_id=book.id) }}" target="_blank" rel="noopener">
+        {{ icon('file', 16) }} Mở {{ info.filename }}
+      </a>
+    </div>
+  </section>
+{% endif %}
+
+{% endblock %}
